@@ -1,13 +1,11 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        KUBECONFIG = 'C:\\ProgramData\\Jenkins\\.kube\\config'
+    }
 
-        stage('Clone') {
-            steps {
-                checkout scm
-            }
-        }
+    stages {
 
         stage('Build with Maven') {
             steps {
@@ -23,7 +21,7 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f deployment.yaml --validate=false'
             }
         }
 
