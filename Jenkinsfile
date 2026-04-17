@@ -5,7 +5,6 @@ pipeline {
 
         stage('Clone') {
             steps {
-                echo 'Cloning repository...'
                 checkout scm
             }
         }
@@ -22,9 +21,15 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Deploy to Kubernetes') {
             steps {
-                bat 'docker run --rm maven-app'
+                bat 'kubectl apply -f deployment.yaml'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                bat 'kubectl get pods'
             }
         }
     }
